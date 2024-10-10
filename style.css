@@ -1,0 +1,172 @@
+/* Large screen  */
+@media (max-width: 1400px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* Tablet screen  */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Mobile screen  */
+@media (max-width: 450px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+body {
+  --broken-white: #e9e0ce;
+  --light-beige: #dabba5;
+  --light-violet: #8d5d64;
+  --dark-violet: #66302b;
+  --dark-beige: #3b3430;
+
+  font-family: "Noto Sans SC", sans-serif;
+  background-image: url("img/wallpaper.jpg");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#title {
+  font-family: "Ma Shan Zheng", cursive;
+  font-size: 4rem;
+  color: var(--dark-violet);
+  text-shadow: 0 0 3px var(--light-violet);
+  margin-top: 0.5em;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  margin-top: 1em;
+  font-size: 1rem;
+}
+
+#input-text {
+  --textbox-height: 3vmin;
+  --textbox-width: 30vmin;
+
+  background-color: var(--broken-white);
+  border: 1px solid var(--light-violet);
+  border-radius: 1em;
+
+  height: var(--textbox-height);
+  width: var(--textbox-width);
+  padding: 1em;
+  overflow-y: auto;
+  resize: none;
+}
+
+button {
+  background-color: var(--light-beige);
+  border: 1px solid var(--dark-beige);
+  color: var(--dark-beige);
+  border-radius: 1em;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 0.5em 1em;
+  margin-left: 5%;
+  cursor: pointer;
+  transition: 200ms scale scale-in-out;
+}
+
+button:hover {
+  scale: 1.1;
+}
+
+.output-button {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+}
+
+.button-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 1em;
+}
+
+.button-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+}
+
+#output-text {
+  width: 60vw;
+  height: 50vh;
+
+  background-color: var(--light-beige);
+  border: 1px solid var(--light-violet);
+  border-radius: 1em;
+  overflow-y: auto;
+  padding: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+#output-text.cover {
+  background-image: url("img/wallpaper_cover.webp");
+  background-size: contain;
+}
+
+.words-container {
+  background-color: var(--broken-white);
+  border: 2px solid var(--dark-beige);
+  border-radius: 0.5em;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.2em 0.5em;
+  position: relative;
+  visibility: visible;
+}
+
+.words-container.cover {
+  visibility: hidden;
+}
+
+.words-container .close {
+  background: var(--dark-beige);
+  color: var(--broken-white);
+  border-radius: 50%;
+  padding: 0.1em 0.3em;
+  position: absolute;
+  top: -30%;
+  visibility: hidden;
+}
+
+.words-container:hover .close {
+  visibility: visible;
+}
+
+.control-time {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+input {
+  height: 100%;
+  background-color: var(--broken-white);
+  border: 1px solid var(--light-violet);
+  border-radius: 0.3em;
+}
