@@ -13,6 +13,7 @@ const breakTime = document.getElementById("break");
 
 let outputArr = [];
 let pause = false;
+let waiting = false;
 
 addButton.addEventListener("click", (e) => {
   addOutput();
@@ -41,7 +42,7 @@ inputImg.addEventListener("change", (e) => {
       // OCR
       const worker = await Tesseract.createWorker("chi_sim");
       const ret = await worker.recognize(imageUrl);
-      inputText.value = ret.data.text;
+      inputText.value = ret.data.text.replace(/[^\S\r\n]+/g, "");
       await worker.terminate();
       inputImg.value = "";
     };
@@ -84,7 +85,7 @@ playButton.addEventListener("click", (e) => {
     pause = false;
   } else {
     // Avoid playing many times
-    if (!window.speechSynthesis.speaking) {
+    if (!window.speechSynthesis.speaking && !waiting) {
       // Get the words
       let words = document.getElementsByClassName("words");
       let wordsArr = [];
@@ -105,7 +106,11 @@ playButton.addEventListener("click", (e) => {
 
           speech.onend = function () {
             index++;
-            setTimeout(speakNextWord, breakTime.value * 1000);
+            waiting = true;
+            setTimeout(() => {
+              waiting = false;
+              speakNextWord();
+            }, breakTime.value * 1000);
           };
           window.speechSynthesis.speak(speech);
           // Highlight the text
@@ -118,7 +123,7 @@ playButton.addEventListener("click", (e) => {
 });
 
 pauseButton.addEventListener("click", (e) => {
-  if (window.speechSynthesis.speaking) {
+  if (window.speechSynthesis.speaking || waiting) {
     window.speechSynthesis.pause();
     pause = true;
   }
