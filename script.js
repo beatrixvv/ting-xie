@@ -126,6 +126,10 @@ pauseButton.addEventListener("click", (e) => {
 
 stopButton.addEventListener("click", (e) => {
   window.speechSynthesis.cancel();
+
+  // Remove highlight
+  const highlightWord = document.getElementsByClassName("highlight");
+  highlightWord[0].classList.remove("highlight");
 });
 
 function clearInput() {
