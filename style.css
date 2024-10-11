@@ -52,13 +52,32 @@ body {
 .input {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 1em;
   font-size: 1rem;
 }
 
+.input-img-container {
+  --textbox-height: 50px;
+  --textbox-width: 80px;
+
+  height: var(--textbox-height);
+  width: var(--textbox-width);
+
+  background-color: var(--broken-white);
+  border: 1px solid var(--light-violet);
+  border-radius: 1em;
+  font-size: 0.7rem;
+  color: var(--dark-beige);
+  padding: 0em 0.5em;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
 #input-text {
-  --textbox-height: 3vmin;
-  --textbox-width: 30vmin;
+  --textbox-height: 20px;
+  --textbox-width: 40%;
 
   background-color: var(--broken-white);
   border: 1px solid var(--light-violet);
@@ -66,13 +85,9 @@ body {
 
   height: var(--textbox-height);
   width: var(--textbox-width);
-  padding: 1em;
+  padding: 1em 0.5em;
   overflow-y: auto;
   resize: none;
-}
-
-#input-text.dragover {
-  border: 2px solid var(--light-violet);
 }
 
 button {
@@ -84,9 +99,9 @@ button {
   height: fit-content;
   width: fit-content;
   padding: 0.5em 1em;
-  margin-left: 5%;
   cursor: pointer;
   transition: 200ms scale scale-in-out;
+  margin: 1em;
 }
 
 button:hover {
@@ -96,7 +111,7 @@ button:hover {
 .output-button {
   display: flex;
   flex-direction: row;
-  gap: 2em;
+  justify-content: space-around;
 }
 
 .button-left {
@@ -115,7 +130,7 @@ button:hover {
 }
 
 #output-text {
-  width: 60vw;
+  width: 40vw;
   height: 50vh;
 
   background-color: var(--light-beige);
@@ -153,8 +168,11 @@ button:hover {
   color: var(--broken-white);
   border-radius: 50%;
   padding: 0.1em 0.3em;
+  font-size: 0.6rem;
   position: absolute;
-  top: -30%;
+  top: -5px;
+  right: -5px;
+  margin: 0;
   visibility: hidden;
 }
 
