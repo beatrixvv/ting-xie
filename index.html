@@ -18,7 +18,11 @@
     <div id="title">听写练习</div>
     <div class="main">
       <div class="input">
-        <textarea name="input-text" id="input-text" placeholder="生词或者图片"></textarea>
+        <div class="input-img-container">
+          <label for="input-img" style="cursor: pointer;">Upload image</label>
+          <input type="file" id="input-img" style="display: none;" accept="image/*"/>
+        </div>
+        <textarea name="input-text" id="input-text" placeholder="生词"></textarea>
         <button id="add-button">Add</button>
       </div>
       <div class="output-button">
