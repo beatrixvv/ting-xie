@@ -1,4 +1,5 @@
-const input = document.getElementById("input-text");
+const inputText = document.getElementById("input-text");
+const inputImg = document.getElementById("input-img");
 const output = document.getElementById("output-text");
 const addButton = document.getElementById("add-button");
 const randomButton = document.getElementById("random-button");
@@ -13,49 +14,41 @@ const breakTime = document.getElementById("break");
 let outputArr = [];
 let pause = false;
 
-// OCR feature
-["dragenter", "dragover", "dragleave", "drop"].forEach((event) => {
-  input.addEventListener(event, (e) => e.preventDefault());
-});
-
-// Highlight on dragover
-input.addEventListener("dragover", () => {
-  input.classList.add("dragover");
-});
-input.addEventListener("dragleave", () => {
-  input.classList.remove("dragover");
-});
-
-// Drop event
-input.addEventListener("drop", (e) => {
-  input.classList.remove("dragover");
-
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    const file = files[0];
-
-    if (file.type.startsWith("image/")) {
-      // OCR
-      (async () => {
-        const worker = await Tesseract.createWorker("chi_sim");
-        const ret = await worker.recognize(file.name);
-        input.textContent = ret.data.text;
-        await worker.terminate();
-      })();
-    }
-  }
-});
-
 addButton.addEventListener("click", (e) => {
   addOutput();
 });
 
-input.addEventListener("keydown", (e) => {
+inputText.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
     // Prevents adding a newline
     e.preventDefault();
     // Move input to the output area
     addOutput();
+  }
+});
+
+// OCR feature
+inputImg.addEventListener("change", (e) => {
+  const file = inputImg.files[0];
+  if (!file) return;
+  if (file.type.startsWith("image/")) {
+    // Read the image
+    const reader = new FileReader();
+    reader.onload = async function (e) {
+      const imageUrl = e.target.result;
+      inputText.value = "Processing file...";
+
+      // OCR
+      const worker = await Tesseract.createWorker("chi_sim");
+      const ret = await worker.recognize(imageUrl);
+      inputText.value = ret.data.text;
+      await worker.terminate();
+      inputImg.value = "";
+    };
+    reader.readAsDataURL(file);
+  } else {
+    inputText.value = "Image only!";
+    inputImg.value = "";
   }
 });
 
@@ -136,7 +129,7 @@ stopButton.addEventListener("click", (e) => {
 });
 
 function clearInput() {
-  input.value = "";
+  inputText.value = "";
 }
 
 function clearOutput() {
@@ -145,8 +138,8 @@ function clearOutput() {
 
 function addOutput() {
   const splitFunct = (str) => str.split(/\r?\n/);
-  const inputText = input.value.trim();
-  const inputArr = splitFunct(inputText);
+  const inputTrim = inputText.value.trim();
+  const inputArr = splitFunct(inputTrim);
 
   inputArr.forEach((input) => {
     if (input) {
