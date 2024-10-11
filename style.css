@@ -71,6 +71,10 @@ body {
   resize: none;
 }
 
+#input-text.dragover {
+  border: 2px solid var(--light-violet);
+}
+
 button {
   background-color: var(--light-beige);
   border: 1px solid var(--dark-beige);
@@ -158,6 +162,11 @@ button:hover {
   visibility: visible;
 }
 
+.words-container.highlight {
+  background: var(--dark-violet);
+  color: var(--broken-white);
+}
+
 .control-time {
   display: flex;
   flex-direction: row;
@@ -169,4 +178,8 @@ input {
   background-color: var(--broken-white);
   border: 1px solid var(--light-violet);
   border-radius: 0.3em;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
