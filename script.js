@@ -80,61 +80,73 @@ clearButton.addEventListener("click", (e) => {
 });
 
 playButton.addEventListener("click", (e) => {
-  if (pause) {
-    window.speechSynthesis.resume();
-    pause = false;
-  } else {
-    // Avoid playing many times
-    if (!window.speechSynthesis.speaking && !waiting) {
-      // Get the words
-      let words = document.getElementsByClassName("words");
-      let wordsArr = [];
-      for (let i = 0; i < words.length; i++) {
-        wordsArr.push(words[i].textContent);
+  if ("speechSynthesis" in window) {
+    if (pause) {
+      window.speechSynthesis.resume();
+      pause = false;
+    } else {
+      // Avoid playing many times
+      if (!window.speechSynthesis.speaking && !waiting) {
+        // Get the words
+        let words = document.getElementsByClassName("words");
+        let wordsArr = [];
+        for (let i = 0; i < words.length; i++) {
+          wordsArr.push(words[i].textContent);
+        }
+
+        // TTS
+        let index = 0;
+        const speakNextWord = () => {
+          // Remove highlight
+          if (index != 0) {
+            words[index - 1].parentElement.classList.remove("highlight");
+          }
+          if (index < wordsArr.length) {
+            const speech = new SpeechSynthesisUtterance(wordsArr[index]);
+            speech.lang = "zh-CN";
+
+            speech.onend = function () {
+              index++;
+              waiting = true;
+              setTimeout(() => {
+                waiting = false;
+                speakNextWord();
+              }, breakTime.value * 1000);
+            };
+            window.speechSynthesis.speak(speech);
+            // Highlight the text
+            words[index].parentElement.classList.add("highlight");
+          }
+        };
+        speakNextWord();
       }
-
-      // TTS
-      let index = 0;
-      const speakNextWord = () => {
-        // Remove highlight
-        if (index != 0) {
-          words[index - 1].parentElement.classList.remove("highlight");
-        }
-        if (index < wordsArr.length) {
-          const speech = new SpeechSynthesisUtterance(wordsArr[index]);
-          speech.lang = "zh-CN";
-
-          speech.onend = function () {
-            index++;
-            waiting = true;
-            setTimeout(() => {
-              waiting = false;
-              speakNextWord();
-            }, breakTime.value * 1000);
-          };
-          window.speechSynthesis.speak(speech);
-          // Highlight the text
-          words[index].parentElement.classList.add("highlight");
-        }
-      };
-      speakNextWord();
     }
+  } else {
+    alert("Feature not supported!");
   }
 });
 
 pauseButton.addEventListener("click", (e) => {
-  if (window.speechSynthesis.speaking || waiting) {
-    window.speechSynthesis.pause();
-    pause = true;
+  if ("speechSynthesis" in window) {
+    if (window.speechSynthesis.speaking || waiting) {
+      window.speechSynthesis.pause();
+      pause = true;
+    }
+  } else {
+    alert("Feature not supported!");
   }
 });
 
 stopButton.addEventListener("click", (e) => {
-  window.speechSynthesis.cancel();
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
 
-  // Remove highlight
-  const highlightWord = document.getElementsByClassName("highlight");
-  highlightWord[0].classList.remove("highlight");
+    // Remove highlight
+    const highlightWord = document.getElementsByClassName("highlight");
+    highlightWord[0].classList.remove("highlight");
+  } else {
+    alert("Feature not supported!");
+  }
 });
 
 function clearInput() {
