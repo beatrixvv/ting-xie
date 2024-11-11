@@ -28,6 +28,12 @@ body {
 
   font-family: "Noto Sans SC", sans-serif;
   background-image: url("img/wallpaper.jpg");
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,7 +45,6 @@ body {
   font-size: 4rem;
   color: var(--dark-violet);
   text-shadow: 0 0 3px var(--light-violet);
-  margin-top: 0.5em;
 }
 
 .main {
