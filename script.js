@@ -14,6 +14,7 @@ const breakTime = document.getElementById("break");
 let outputArr = [];
 let pause = false;
 let waiting = false;
+let timeoutId = null;
 
 addButton.addEventListener("click", (e) => {
   addOutput();
@@ -108,7 +109,7 @@ playButton.addEventListener("click", (e) => {
             speech.onend = function () {
               index++;
               waiting = true;
-              setTimeout(() => {
+              timeoutId = setTimeout(() => {
                 waiting = false;
                 speakNextWord();
               }, breakTime.value * 1000);
@@ -139,6 +140,11 @@ pauseButton.addEventListener("click", (e) => {
 
 stopButton.addEventListener("click", (e) => {
   if ("speechSynthesis" in window) {
+    if (waiting) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+      waiting = false;
+    }
     window.speechSynthesis.cancel();
 
     // Remove highlight
