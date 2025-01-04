@@ -134,6 +134,11 @@ button:hover {
   gap: 1em;
 }
 
+#play-button.disabled {
+  pointer-events: none;
+  background-color: var(--broken-white);
+}
+
 #output-text {
   width: 40vw;
   height: 50vh;
@@ -146,6 +151,10 @@ button:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em;
+}
+
+#output-text.disabled {
+  pointer-events: none;
 }
 
 #output-text.cover {
