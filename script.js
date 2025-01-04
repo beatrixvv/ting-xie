@@ -10,18 +10,21 @@ const pauseButton = document.getElementById("pause-button");
 const stopButton = document.getElementById("stop-button");
 const speedTime = document.getElementById("speed");
 const breakTime = document.getElementById("break");
+const outputText = document.getElementById("output-text");
 
 let outputArr = [];
 let pause = false;
-let waiting = false;
 let timeoutId = null;
+let ongoing = false;
 
 addButton.addEventListener("click", (e) => {
+  stopSpeech();
   addOutput();
 });
 
 inputText.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
+    stopSpeech();
     // Prevents adding a newline
     e.preventDefault();
     // Move input to the output area
@@ -58,6 +61,7 @@ randomButton.addEventListener("click", (e) => {
   let words = Array.from(document.getElementsByClassName("words-container"));
   const shuffledWords = shuffleArr(words);
 
+  stopSpeech();
   // Clear current output
   clearOutput();
   // Enter the new order of output
@@ -77,6 +81,7 @@ coverButton.addEventListener("click", (e) => {
 });
 
 clearButton.addEventListener("click", (e) => {
+  stopSpeech();
   clearOutput();
 });
 
@@ -87,7 +92,8 @@ playButton.addEventListener("click", (e) => {
       pause = false;
     } else {
       // Avoid playing many times
-      if (!window.speechSynthesis.speaking && !waiting) {
+      if (!ongoing) {
+        start();
         // Get the words
         let words = document.getElementsByClassName("words");
         let wordsArr = [];
@@ -108,15 +114,17 @@ playButton.addEventListener("click", (e) => {
 
             speech.onend = function () {
               index++;
-              waiting = true;
+              playButton.classList.add("disabled");
               timeoutId = setTimeout(() => {
-                waiting = false;
                 speakNextWord();
+                playButton.classList.remove("disabled");
               }, breakTime.value * 1000);
             };
             window.speechSynthesis.speak(speech);
             // Highlight the text
             words[index].parentElement.classList.add("highlight");
+          } else {
+            end();
           }
         };
         speakNextWord();
@@ -129,7 +137,7 @@ playButton.addEventListener("click", (e) => {
 
 pauseButton.addEventListener("click", (e) => {
   if ("speechSynthesis" in window) {
-    if (window.speechSynthesis.speaking || waiting) {
+    if (ongoing) {
       window.speechSynthesis.pause();
       pause = true;
     }
@@ -140,16 +148,7 @@ pauseButton.addEventListener("click", (e) => {
 
 stopButton.addEventListener("click", (e) => {
   if ("speechSynthesis" in window) {
-    if (waiting) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-      waiting = false;
-    }
-    window.speechSynthesis.cancel();
-
-    // Remove highlight
-    const highlightWord = document.getElementsByClassName("highlight");
-    highlightWord[0].classList.remove("highlight");
+    stopSpeech();
   } else {
     alert("Feature not supported!");
   }
@@ -207,4 +206,37 @@ function shuffleArr(arr) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+function start() {
+  ongoing = true;
+  outputText.classList.add("disabled");
+}
+
+function end() {
+  // Return to default value
+  ongoing = false;
+  pause = false;
+  timeoutId = null;
+  // Recover button
+  playButton.classList.remove("disabled");
+  outputText.classList.remove("disabled");
+  // Cancel if ended with pause
+  window.speechSynthesis.cancel();
+}
+
+function stopSpeech() {
+  if ("speechSynthesis" in window) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    window.speechSynthesis.cancel();
+    end();
+
+    // Remove highlight
+    const highlightWord = document.getElementsByClassName("highlight");
+    if (highlightWord.length > 0) {
+      highlightWord[0].classList.remove("highlight");
+    }
+  }
 }
